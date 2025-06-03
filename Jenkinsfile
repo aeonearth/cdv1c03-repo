@@ -18,7 +18,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "TANYONGHE"
+        APP_NAME = "limtianzhong"
         APP_ENV  = "DEV"
     }
 
@@ -32,21 +32,6 @@ pipeline {
 		
         stage('ST2-3269032f') {
             steps {
-		script {
-                    // Remove existing container if it exists
-                    sh '''
-                        if docker container inspect server1-4545315t >/dev/null 2>&1; then
-                            docker stop server1-4545315t
-                            docker rm server1-4545315t
-                        fi
-                    '''
-                    
-                    // Create and run new container
-                    sh 'docker run -d --name server1-4545315t -p 32700:80 svr-image-4545315t'
-                    
-                    // Verify container is running
-                    sh 'docker ps -f name=server1-4545315t'
-                }
                 echo "ST2-3269032f: Server1 is successfully created"
             }
         }
@@ -57,11 +42,6 @@ pipeline {
             }
         }
 		
-        stage('ST4-Parallel-3269032f') {
-            steps {
-                echo "ST4-Parallel-3269032f: Security Scrutinises"
-            }
-        }
         stage('ST4A-3269032f') {
             steps {
                 echo "ST4A-3269032f: SQLI Check Completed"
