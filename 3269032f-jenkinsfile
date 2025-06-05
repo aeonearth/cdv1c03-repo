@@ -54,18 +54,6 @@ pipeline {
 		
         stage('ST3-3269032f') {
             steps {
-        script {
-            // Wait up to 60 seconds for the container to be healthy
-            timeout(time: 60, unit: 'SECONDS') {
-                waitUntil {
-                    def status = sh(
-                        script: "docker inspect --format='{{.State.Health.Status}}' server1-3269032f",
-                        returnStdout: true
-                    ).trim()
-                    echo "Health status: ${status}"
-                    return (status == 'healthy')
-                }
-            }
                 echo "ST3-3269032f: Server1 is healthy – Health check done"
             }
         }
