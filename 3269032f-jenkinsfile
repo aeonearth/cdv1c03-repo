@@ -29,9 +29,9 @@ pipeline {
 		script {
                     // Stop and remove container if it already exists
                     sh '''
-                    if [ $(docker ps -a -q -f name=server1-3269032f) ]; then
-                        docker stop server1-3269032f || true
-                        docker rm server1-3269032f || true
+                    if [ $(docker ps -a -q -f name=svr-3269032f) ]; then
+                        docker stop svr-3269032f || true
+                        docker rm svr-3269032f || true
                     fi
                     '''
                 }
@@ -44,17 +44,17 @@ pipeline {
                 script {
                     sh '''
                     docker run -d \
-                        --name server1-3269032f \
+                        --name svr-3269032f \
                         svr-image-3269032f
                     '''
                 }
-                echo "ST2-3269032f: Server1 is successfully created"
+                echo "ST2-3269032f: svr is successfully created"
             }
         }
 		
         stage('ST3-3269032f') {
             steps {
-                echo "ST3-3269032f: Server1 is healthy – Health check done"
+                echo "ST3-3269032f: svr is healthy – Health check done"
             }
         }
 		
