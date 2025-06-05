@@ -26,18 +26,46 @@ pipeline {
         
         stage('ST1-3269032f') {
             steps {
+		script {
+                    // Stop and remove container if it already exists
+                    sh '''
+                    if [ $(docker ps -a -q -f name=server1-3269032f) ]; then
+                        docker stop server1-3269032f || true
+                        docker rm server1-3269032f || true
+                    fi
+                    '''
+                }
                 echo "ST1-3269032f: Setup Release Environment Completed."
             }
         }
 		
         stage('ST2-3269032f') {
             steps {
+                script {
+                    sh '''
+                    docker run -d \
+                        --name server1-3269032f \
+                        svr-image-3269032f
+                    '''
+                }
                 echo "ST2-3269032f: Server1 is successfully created"
             }
         }
 		
         stage('ST3-3269032f') {
             steps {
+        script {
+            // Wait up to 60 seconds for the container to be healthy
+            timeout(time: 60, unit: 'SECONDS') {
+                waitUntil {
+                    def status = sh(
+                        script: "docker inspect --format='{{.State.Health.Status}}' server1-3269032f",
+                        returnStdout: true
+                    ).trim()
+                    echo "Health status: ${status}"
+                    return (status == 'healthy')
+                }
+            }
                 echo "ST3-3269032f: Server1 is healthy – Health check done"
             }
         }
