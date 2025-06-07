@@ -76,9 +76,22 @@ pipeline {
             }
         }
 
-        stage('ST5-3269032f') {
+	stage('ST5-3269032f') {
             steps {
-                echo "ST5-3269032f : Continue the pipeline."
+                script {
+                    def userInput = input(
+                        id: 'ProceedConfirmation', message: 'Continue the pipeline?',
+                        parameters: [
+                            [$class: 'ChoiceParameterDefinition', choices: 'Proceed\nAbort', name: 'UserChoice']
+                        ]
+                    )
+
+                    if (userInput == 'Proceed') {
+                        echo 'ST5-3269032f : Continue the pipeline.'
+                    } else {
+                        error('Pipeline aborted by user choice.')
+                    }
+                }
             }
         }
 		
