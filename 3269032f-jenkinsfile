@@ -61,7 +61,7 @@ pipeline {
             }
         }
 		
-        stage('ST4A-3269032f') {
+	stage('ST4-Parallel-3269032f') {
             parallel {
                 stage('SQL Injection Check') {
                     steps {
@@ -74,6 +74,7 @@ pipeline {
                     }
                 }
             }
+        }
 
         stage('ST5-3269032f') {
             steps {
