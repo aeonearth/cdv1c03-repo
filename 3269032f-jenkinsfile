@@ -4,6 +4,10 @@ pipeline {
         node {
             label 'master'
         }
+        docker {
+            image 'maven:3.9.9-eclipse-temurin-21'
+            args '-v $HOME/.m2:/root/.m2'
+        }
     }
 
     tools { 
@@ -33,7 +37,22 @@ pipeline {
         stage('ST2-3269032f') {
             steps {
                 script {
-			docker run -dit --name server1-3269032f svr-image-3269032f bash -c "service apache2 start && bash"
+                    def imageName = "svr-image-3269032f"
+                    def containerName = "server1-3269032f"
+
+                    // Check if container exists and remove it first
+                    sh """
+                        if [ \$(docker ps -a -q -f name=${containerName}) ]; then
+                            echo "Removing existing container ${containerName}..."
+                            docker rm -f ${containerName}
+                        fi
+                    """
+
+                    // Run container
+                    sh """
+                        echo "Starting container ${containerName} from image ${imageName}..."
+                        docker run -d --name ${containerName} ${imageName}
+                    """
                 }
                 echo "ST2-3269032f: Server1 is successfully created"
             }
