@@ -47,7 +47,7 @@ pipeline {
                     // Run container
                     sh """
                         echo "Starting container ${containerName} from image ${imageName}..."
-                        docker run -d --name ${containerName} ${imageName} tail -f /dev/null
+                        docker run -d -p 32700:80 --name ${containerName} ${imageName} tail -f /dev/null
 			docker exec ${containerName} service apache2 start
                     """
                 }
