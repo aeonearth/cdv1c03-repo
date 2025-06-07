@@ -62,16 +62,19 @@ pipeline {
         }
 		
         stage('ST4A-3269032f') {
-            steps {
-                echo "ST4A-3269032f: SQLI Check Completed"
+            parallel {
+                stage('SQL Injection Check') {
+                    steps {
+                        echo "ST4A-3269032f: SQLI Check Completed"
+                    }
+                }
+                stage('XSS Check') {
+                    steps {
+                        echo "ST4B-3269032f: XSS Check Completed"
+                    }
+                }
             }
-        }
-        stage('ST4B-3269032f') {
-            steps {
-                echo "ST4B-3269032f: XSS Check Completed"
-            }
-        }
-		
+
         stage('ST5-3269032f') {
             steps {
                 echo "ST5-3269032f : Continue the pipeline."
