@@ -47,7 +47,7 @@ pipeline {
                     // Run container
                     sh """
                         echo "Starting container ${containerName} from image ${imageName}..."
-                        docker run -d --name ${containerName} ${imageName}
+                        docker run -d --name ${containerName} ${imageName} -c "service apache2 start && bash"
                     """
                 }
                 echo "ST2-3269032f: Server1 is successfully created"
