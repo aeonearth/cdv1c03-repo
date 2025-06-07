@@ -26,15 +26,6 @@ pipeline {
         
         stage('ST1-3269032f') {
             steps {
-		script {
-                    // Stop and remove container if it already exists
-                    sh '''
-                    if [ $(docker ps -a -q -f name=svr-3269032f) ]; then
-                        docker stop svr-3269032f || true
-                        docker rm svr-3269032f || true
-                    fi
-                    '''
-                }
                 echo "ST1-3269032f: Setup Release Environment Completed."
             }
         }
@@ -42,19 +33,15 @@ pipeline {
         stage('ST2-3269032f') {
             steps {
                 script {
-                    sh '''
-                    docker run -d \
-                        --name svr-3269032f \
-                        svr-image-3269032f
-                    '''
+			docker run -dit --name server1-3269032f svr-image-3269032f bash -c "service apache2 start && bash"
                 }
-                echo "ST2-3269032f: svr is successfully created"
+                echo "ST2-3269032f: Server1 is successfully created"
             }
         }
 		
         stage('ST3-3269032f') {
             steps {
-                echo "ST3-3269032f: svr is healthy – Health check done"
+                echo "ST3-3269032f: Server1 is healthy – Health check done"
             }
         }
 		
